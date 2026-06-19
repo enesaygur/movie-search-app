@@ -1,4 +1,5 @@
 import type { Movie } from "../types/movie";
+import MovieCard from "./MovieCard";
 type MovieListProps = {
   movies: Movie[];
 };
@@ -6,10 +7,7 @@ function MovieList({ movies }: MovieListProps) {
   return (
     <ul>
       {movies.map((movie) => (
-        <li key={movie["#IMDB_ID"]}>
-          {movie["#TITLE"]}
-          {movie["#YEAR"]}
-        </li>
+        <MovieCard key={movie["#IMDB_ID"]} movie={movie} />
       ))}
     </ul>
   );
