@@ -1,6 +1,7 @@
 import { useState } from "react";
 import SearchBar from "./components/SearchBar";
 import { searchMovies } from "./services/movieService";
+import MovieList from "./components/MovieList";
 
 function App() {
   const [query, setQuery] = useState("");
@@ -13,11 +14,7 @@ function App() {
     <>
       <h1>Movie Search App</h1>
       <SearchBar value={query} onChange={setQuery} onSearch={handleSearch} />
-      <ul>
-        {movies.map((movie) => (
-          <li key={movie["#IMDB_ID"]}>{movie["#TITLE"]}</li>
-        ))}
-      </ul>
+      <MovieList movies={movies} />
     </>
   );
 }
