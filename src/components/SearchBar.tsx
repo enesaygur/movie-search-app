@@ -1,10 +1,9 @@
 type SearchBarProps = {
   value: string;
   onChange: (value: string) => void;
-  onSearch: () => void;
 };
 
-function SearchBar({ value, onChange, onSearch }: SearchBarProps) {
+function SearchBar({ value, onChange }: SearchBarProps) {
   return (
     <div>
       <input
@@ -13,7 +12,6 @@ function SearchBar({ value, onChange, onSearch }: SearchBarProps) {
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />
-      <button onClick={onSearch}>Search</button>
     </div>
   );
 }
