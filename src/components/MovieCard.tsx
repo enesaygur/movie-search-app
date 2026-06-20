@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import type { Movie } from "../types/movie";
 import styles from "./MovieCard.module.css";
 
@@ -5,8 +6,13 @@ type MovieCardProps = {
   movie: Movie;
 };
 function MovieCard({ movie }: MovieCardProps) {
+  const navigate = useNavigate();
   return (
-    <div className={styles.card}>
+    <div
+      className={styles.card}
+      onClick={() => navigate(`/movie/${movie["#IMDB_ID"]}`)}
+      style={{ cursor: "pointer" }}
+    >
       <img
         src={movie["#IMG_POSTER"]}
         alt={movie["#TITLE"]}
