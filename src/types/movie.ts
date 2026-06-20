@@ -3,4 +3,5 @@ export type Movie = {
   "#TITLE": string;
   "#YEAR": number;
   "#IMG_POSTER": string;
+  "#ACTORS": string[];
 };
