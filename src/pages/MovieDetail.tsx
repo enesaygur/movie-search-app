@@ -2,13 +2,22 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { Movie } from "../types/movie";
 import { getMovieById } from "../services/movieService";
-
-function MovieDetail() {
+type MovieDetailProps = {
+  favorites: Movie[];
+  addFavorite: (movie: Movie) => void;
+  removeFavorite: (id: string) => void;
+};
+function MovieDetail({
+  favorites,
+  addFavorite,
+  removeFavorite,
+}: MovieDetailProps) {
   const { id } = useParams();
   const [movie, setMovie] = useState<Movie | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const isFav = favorites.some((m) => m["#IMDB_ID"] === id);
   useEffect(() => {
     if (!id) return;
     const fetchMovie = async () => {
@@ -34,9 +43,19 @@ function MovieDetail() {
   return (
     <div>
       <button onClick={() => navigate(-1)}>Go back</button>
-      <h1>{movie["#TITLE"]}</h1>
-      <p>{movie["#ACTORS"]}</p>
-      <img src={movie["#IMG_POSTER"]} alt={movie["#TITLE"]} width={400} />
+      <div>
+        <h1>{movie["#TITLE"]}</h1>
+        <p>{movie["#ACTORS"]}</p>
+        <img src={movie["#IMG_POSTER"]} alt={movie["#TITLE"]} width={400} />
+      </div>
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          isFav ? removeFavorite(movie["#IMDB_ID"]) : addFavorite(movie);
+        }}
+      >
+        {isFav ? "⭐" : "☆"}
+      </button>
     </div>
   );
 }
