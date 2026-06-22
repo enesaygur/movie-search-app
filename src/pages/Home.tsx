@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import type { Movie } from "../types/movie";
 import SearchBar from "../components/SearchBar";
 import MovieList from "../components/MovieList";
-import { searchMovies } from "../services/movieService";
 import { useSearchParams } from "react-router-dom";
+import { useMovieSearch } from "../hooks/useMovieSearch";
 type HomeProps = {
   favorites: Movie[];
   addFavorite: (movie: Movie) => void;
@@ -11,13 +11,11 @@ type HomeProps = {
 };
 
 function Home({ favorites, addFavorite, removeFavorite }: HomeProps) {
-  const [movies, setMovies] = useState<Movie[] | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const [searchParams, setSearchParams] = useSearchParams();
   const initialQuery = searchParams.get("q") || "";
   const [query, setQuery] = useState(initialQuery);
   const [debounceQuery, setDebounceQuery] = useState(initialQuery);
+  const { movies, loading, error } = useMovieSearch(debounceQuery);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -34,27 +32,6 @@ function Home({ favorites, addFavorite, removeFavorite }: HomeProps) {
     }
   }, [query, setSearchParams]);
 
-  useEffect(() => {
-    if (debounceQuery.length < 2) {
-      setMovies(null);
-      return;
-    }
-
-    const fetchMovies = async () => {
-      setLoading(true);
-      setError("");
-      try {
-        const data = await searchMovies(debounceQuery);
-        setMovies(data);
-      } catch {
-        setError("Something went wrong");
-        setMovies(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchMovies();
-  }, [debounceQuery]);
   return (
     <>
       <h1>Movie Search App</h1>
