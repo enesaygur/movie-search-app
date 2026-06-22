@@ -3,6 +3,7 @@ import type { Movie } from "../types/movie";
 import SearchBar from "../components/SearchBar";
 import MovieList from "../components/MovieList";
 import { searchMovies } from "../services/movieService";
+import { useSearchParams } from "react-router-dom";
 type HomeProps = {
   favorites: Movie[];
   addFavorite: (movie: Movie) => void;
@@ -10,11 +11,13 @@ type HomeProps = {
 };
 
 function Home({ favorites, addFavorite, removeFavorite }: HomeProps) {
-  const [query, setQuery] = useState("");
   const [movies, setMovies] = useState<Movie[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [debounceQuery, setDebounceQuery] = useState(query);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialQuery = searchParams.get("q") || "";
+  const [query, setQuery] = useState(initialQuery);
+  const [debounceQuery, setDebounceQuery] = useState(initialQuery);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -22,6 +25,14 @@ function Home({ favorites, addFavorite, removeFavorite }: HomeProps) {
     }, 500);
     return () => clearTimeout(timer);
   }, [query]);
+
+  useEffect(() => {
+    if (query.trim()) {
+      setSearchParams({ q: query });
+    } else {
+      setSearchParams({});
+    }
+  }, [query, setSearchParams]);
 
   useEffect(() => {
     if (debounceQuery.length < 2) {
