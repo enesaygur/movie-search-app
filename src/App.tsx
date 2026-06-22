@@ -3,14 +3,12 @@ import Home from "./pages/Home";
 import MovieDetail from "./pages/MovieDetail";
 import NotFound from "./pages/NotFound";
 import type { Movie } from "./types/movie";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Favorites from "./pages/Favorites";
+import { useLocalStorage } from "./hooks/useLocalStorage";
 
 function App() {
-  const [favorites, setFavorites] = useState<Movie[]>(() => {
-    const saved = localStorage.getItem("favorites");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [favorites, setFavorites] = useLocalStorage<Movie[]>("favorites", []);
 
   const addFavorite = (movie: Movie) => {
     setFavorites((prev) => {
@@ -23,9 +21,6 @@ function App() {
     setFavorites((prev) => prev.filter((m) => m["#IMDB_ID"] !== id));
   };
 
-  useEffect(() => {
-    localStorage.setItem("favorites", JSON.stringify(favorites));
-  }, [favorites]);
   return (
     <>
       <nav>
