@@ -4,6 +4,7 @@ import SearchBar from "../components/SearchBar";
 import MovieList from "../components/MovieList";
 import { useSearchParams } from "react-router-dom";
 import { useMovieSearch } from "../hooks/useMovieSearch";
+import { useDebounce } from "./../hooks/useDebounce";
 type HomeProps = {
   favorites: Movie[];
   addFavorite: (movie: Movie) => void;
@@ -14,15 +15,8 @@ function Home({ favorites, addFavorite, removeFavorite }: HomeProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialQuery = searchParams.get("q") || "";
   const [query, setQuery] = useState(initialQuery);
-  const [debounceQuery, setDebounceQuery] = useState(initialQuery);
+  const debounceQuery = useDebounce(query, 500);
   const { movies, loading, error } = useMovieSearch(debounceQuery);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebounceQuery(query);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [query]);
 
   useEffect(() => {
     if (query.trim()) {
