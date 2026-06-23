@@ -1,15 +1,11 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { Movie } from "../types/movie";
 import { getMovieById } from "../services/movieService";
-import { FavoriteContext } from "../context/FavoritesContext";
+import { useFavorites } from "../hooks/useFavorites";
 
 function MovieDetail() {
-  const context = useContext(FavoriteContext);
-  if (!context) {
-    throw new Error("FavoriteContext is not provided");
-  }
-  const { favorites, addFavorite, removeFavorite } = context;
+  const { favorites, addFavorite, removeFavorite } = useFavorites();
   const { id } = useParams();
   const [movie, setMovie] = useState<Movie | null>(null);
   const [loading, setLoading] = useState(false);

@@ -1,13 +1,7 @@
-import { useContext } from "react";
 import MovieList from "../components/MovieList";
-import { FavoriteContext } from "../context/FavoritesContext";
+import { useFavorites } from "../hooks/useFavorites";
 function Favorites() {
-  const context = useContext(FavoriteContext);
-  if (!context) {
-    throw new Error("FavoriteContext is not provided");
-  }
-
-  const { favorites } = context;
+  const { favorites } = useFavorites();
   return (
     <>
       <h1>Favorite Movies</h1>

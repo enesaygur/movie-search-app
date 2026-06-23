@@ -1,18 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import type { Movie } from "../types/movie";
 import styles from "./MovieCard.module.css";
-import { FavoriteContext } from "../context/FavoritesContext";
-import { useContext } from "react";
+import { useFavorites } from "../hooks/useFavorites";
 
 type MovieCardProps = {
   movie: Movie;
 };
 function MovieCard({ movie }: MovieCardProps) {
-  const context = useContext(FavoriteContext);
-  if (!context) {
-    throw new Error("FavoriteContext is not provided");
-  }
-  const { favorites, addFavorite, removeFavorite } = context;
+  const { favorites, addFavorite, removeFavorite } = useFavorites();
   const navigate = useNavigate();
   const isFav = favorites.some((m) => m["#IMDB_ID"] === movie["#IMDB_ID"]);
   return (
