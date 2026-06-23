@@ -1,23 +1,22 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { Movie } from "../types/movie";
 import { getMovieById } from "../services/movieService";
-type MovieDetailProps = {
-  favorites: Movie[];
-  addFavorite: (movie: Movie) => void;
-  removeFavorite: (id: string) => void;
-};
-function MovieDetail({
-  favorites,
-  addFavorite,
-  removeFavorite,
-}: MovieDetailProps) {
+import { FavoriteContext } from "../context/FavoritesContext";
+
+function MovieDetail() {
+  const context = useContext(FavoriteContext);
+  if (!context) {
+    throw new Error("FavoriteContext is not provided");
+  }
+  const { favorites, addFavorite, removeFavorite } = context;
   const { id } = useParams();
   const [movie, setMovie] = useState<Movie | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const isFav = favorites.some((m) => m["#IMDB_ID"] === id);
+  const isFav = id ? favorites.some((m) => m["#IMDB_ID"] === id) : false;
+
   useEffect(() => {
     if (!id) return;
     const fetchMovie = async () => {
