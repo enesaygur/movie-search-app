@@ -15,6 +15,7 @@ function MovieDetail() {
     queryKey: ["movie", id],
     queryFn: () => getMovieById(id || ""),
     enabled: !!id,
+    staleTime: 1000 * 60 * 10,
   });
   const isFav = id ? favorites.some((m) => m["#IMDB_ID"] === id) : false;
 
