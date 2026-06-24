@@ -2,6 +2,8 @@ import { useNavigate } from "react-router-dom";
 import type { Movie } from "../types/movie";
 import styles from "./MovieCard.module.css";
 import { useFavorites } from "../hooks/useFavorites";
+import { useQueryClient } from "@tanstack/react-query";
+import { getMovieById } from "../services/movieService";
 
 type MovieCardProps = {
   movie: Movie;
@@ -10,10 +12,19 @@ function MovieCard({ movie }: MovieCardProps) {
   const { favorites, addFavorite, removeFavorite } = useFavorites();
   const navigate = useNavigate();
   const isFav = favorites.some((m) => m["#IMDB_ID"] === movie["#IMDB_ID"]);
+  const queryClient = useQueryClient();
+  const prefectMovie = (id: string) => {
+    queryClient.prefetchQuery({
+      queryKey: ["movie", id],
+      queryFn: () => getMovieById(id),
+      staleTime: 1000 * 60 * 10,
+    });
+  };
   return (
     <div
       className={styles.card}
       onClick={() => navigate(`/movie/${movie["#IMDB_ID"]}`)}
+      onMouseEnter={() => prefectMovie(movie["#IMDB_ID"])}
       style={{ cursor: "pointer" }}
     >
       <img
