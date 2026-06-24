@@ -8,11 +8,7 @@ function MovieList({ movies }: MovieListProps) {
   return (
     <div className={styles.container}>
       {movies.map((movie) => (
-        <MovieCard
-          key={movie["#IMDB_ID"]}
-          movie={movie}
-
-        />
+        <MovieCard key={movie["#IMDB_ID"]} movie={movie} />
       ))}
     </div>
   );

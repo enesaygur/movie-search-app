@@ -5,6 +5,8 @@ import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { searchMovies } from "../services/movieService";
 import { useDebounce } from "../hooks/useDebounce";
+import MovieSkeleton from "../components/MovieSkeleton";
+import styles from "../components/MovieList.module.css";
 
 function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -34,9 +36,17 @@ function Home() {
     <>
       <h1>Movie Search App</h1>
       <SearchBar value={query} onChange={setQuery} />
-      {loading && <p>Loading...</p>}
       {error && <p style={{ color: "red" }}>Something went wrong</p>}
-      {movies && movies.length > 0 && <MovieList movies={movies} />}
+      {loading && (
+        <div className={styles.container}>
+          {" "}
+          {Array.from({ length: 7 }).map((_, index) => (
+            <MovieSkeleton key={index} />
+          ))}{" "}
+        </div>
+      )}
+
+      {!loading && movies && movies.length > 0 && <MovieList movies={movies} />}
       {movies && movies.length === 0 && <p>No movies found.</p>}
     </>
   );
