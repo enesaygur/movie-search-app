@@ -1,38 +1,25 @@
-import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import type { Movie } from "../types/movie";
 import { getMovieById } from "../services/movieService";
 import { useFavorites } from "../hooks/useFavorites";
+import { useQuery } from "@tanstack/react-query";
 
 function MovieDetail() {
   const { favorites, addFavorite, removeFavorite } = useFavorites();
   const { id } = useParams();
-  const [movie, setMovie] = useState<Movie | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const navigate = useNavigate();
+  const {
+    data: movie,
+    isLoading: loading,
+    error,
+  } = useQuery({
+    queryKey: ["movie", id],
+    queryFn: () => getMovieById(id || ""),
+    enabled: !!id,
+  });
   const isFav = id ? favorites.some((m) => m["#IMDB_ID"] === id) : false;
 
-  useEffect(() => {
-    if (!id) return;
-    const fetchMovie = async () => {
-      setLoading(true);
-      setError("");
-      try {
-        const data = await getMovieById(id);
-        setMovie(data);
-      } catch {
-        setError("Something went wrong");
-        setMovie(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchMovie();
-  }, [id]);
-
   if (loading) return <p>Loading...</p>;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
+  if (error) return <p style={{ color: "red" }}>Something went wrong</p>;
   if (!movie) return <p>Movie not found</p>;
 
   return (
