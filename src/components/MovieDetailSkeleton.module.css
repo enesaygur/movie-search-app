@@ -1,0 +1,70 @@
+.container {
+padding: 16px;
+}
+
+.backButton {
+width: 90px;
+height: 36px;
+margin-bottom: 24px;
+border-radius: 4px;
+background: #ddd;
+animation: pulse 1.2s infinite;
+}
+
+.content {
+display: flex;
+gap: 24px;
+}
+
+.poster {
+width: 400px;
+height: 600px;
+border-radius: 4px;
+background: #ddd;
+animation: pulse 1.2s infinite;
+}
+
+.info {
+display: flex;
+flex-direction: column;
+gap: 16px;
+flex: 1;
+}
+
+.title {
+width: 70%;
+height: 38px;
+border-radius: 4px;
+background: #ddd;
+animation: pulse 1.2s infinite;
+}
+
+.actors {
+width: 90%;
+height: 20px;
+border-radius: 4px;
+background: #ddd;
+animation: pulse 1.2s infinite;
+}
+
+.favoriteButton {
+width: 48px;
+height: 40px;
+border-radius: 4px;
+background: #ddd;
+animation: pulse 1.2s infinite;
+}
+
+@keyframes pulse {
+0% {
+opacity: 1;
+}
+
+50% {
+opacity: 0.45;
+}
+
+100% {
+opacity: 1;
+}
+}

@@ -2,6 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getMovieById } from "../services/movieService";
 import { useFavorites } from "../hooks/useFavorites";
 import { useQuery } from "@tanstack/react-query";
+import MovieDetailSkeleton from "../components/MovieDetailSkeleton";
 
 function MovieDetail() {
   const { favorites, addFavorite, removeFavorite } = useFavorites();
@@ -20,7 +21,7 @@ function MovieDetail() {
   });
   const isFav = id ? favorites.some((m) => m["#IMDB_ID"] === id) : false;
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <MovieDetailSkeleton />;
   if (error) {
     return (
       <div role="alert">
