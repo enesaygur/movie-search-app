@@ -8,6 +8,7 @@ import { useDebounce } from "../hooks/useDebounce";
 import MovieSkeleton from "../components/MovieSkeleton";
 import styles from "../components/MovieList.module.css";
 import SearchEmptyState from "../components/SearchEmptyState";
+import SearchErrorState from "../components/SearchErrorState";
 
 function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -37,7 +38,7 @@ function Home() {
     <>
       <h1>Movie Search App</h1>
       <SearchBar value={query} onChange={setQuery} />
-      {error && <p style={{ color: "red" }}>Something went wrong</p>}
+      {error && <SearchErrorState />}
       {loading && (
         <div className={styles.container}>
           {" "}
