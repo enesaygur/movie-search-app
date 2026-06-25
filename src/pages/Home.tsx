@@ -20,6 +20,7 @@ function Home() {
     data: movies,
     isLoading: loading,
     error: error,
+    refetch,
   } = useQuery({
     queryKey: ["movies", debounceQuery],
     queryFn: () => searchMovies(debounceQuery),
@@ -38,7 +39,7 @@ function Home() {
     <>
       <h1>Movie Search App</h1>
       <SearchBar value={query} onChange={setQuery} />
-      {error && <SearchErrorState />}
+      {error && <SearchErrorState onRetry={() => refetch()} />}
       {loading && (
         <div className={styles.container}>
           {" "}
