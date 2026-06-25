@@ -11,6 +11,7 @@ function MovieDetail() {
     data: movie,
     isLoading: loading,
     error,
+    refetch,
   } = useQuery({
     queryKey: ["movie", id],
     queryFn: () => getMovieById(id || ""),
@@ -20,7 +21,16 @@ function MovieDetail() {
   const isFav = id ? favorites.some((m) => m["#IMDB_ID"] === id) : false;
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p style={{ color: "red" }}>Something went wrong</p>;
+  if (error) {
+    return (
+      <div role="alert">
+        <p>We could not load this movie</p>
+        <button type="button" onClick={() => refetch()}>
+          Try again
+        </button>
+      </div>
+    );
+  }
   if (!movie) return <p>Movie not found</p>;
 
   return (
