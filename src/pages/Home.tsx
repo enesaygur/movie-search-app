@@ -7,6 +7,7 @@ import { searchMovies } from "../services/movieService";
 import { useDebounce } from "../hooks/useDebounce";
 import MovieSkeleton from "../components/MovieSkeleton";
 import styles from "../components/MovieList.module.css";
+import SearchEmptyState from "../components/SearchEmptyState";
 
 function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -47,7 +48,9 @@ function Home() {
       )}
 
       {!loading && movies && movies.length > 0 && <MovieList movies={movies} />}
-      {movies && movies.length === 0 && <p>No movies found.</p>}
+      {!loading && movies && movies.length === 0 && (
+        <SearchEmptyState query={debounceQuery} />
+      )}
     </>
   );
 }
